@@ -51,7 +51,7 @@ a { color: inherit; text-decoration: none; }
   letter-spacing: 0.02em; font-weight: 800;
 }
 .eyebrow::before, .section-kicker::before, .card-kicker::before { content: ""; width: 28px; height: 1px; background: currentColor; }
-.hero h1 { margin: 18px 0 16px; max-width: 18ch; font-size: clamp(2.2rem, 4vw, 3.4rem); line-height: 1.18; letter-spacing: -0.04em; font-weight: 800; }
+.hero h1 { margin: 18px 0 16px; font-size: clamp(2.2rem, 3.8vw, 3.2rem); line-height: 1.22; letter-spacing: -0.035em; font-weight: 800; }
 .hero p, .section-header p, .problem-card p, .app-card p, .request-copy p { color: var(--text-muted); line-height: 1.68; }
 .hero-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 28px; }
 .hero-note { margin-top: 18px; color: #847975; font-size: 0.92rem; line-height: 1.64; }
