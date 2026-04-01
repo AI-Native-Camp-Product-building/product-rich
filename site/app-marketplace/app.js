@@ -68,21 +68,10 @@ function renderCard(app) {
       </div>
       <h3>${escapeHtml(app.name)}</h3>
       <p>${escapeHtml(app.summary)}</p>
-      <div class="app-meta">
-        <div>
-          <strong>적용 조건</strong>
-          <span>${escapeHtml(requirements)}</span>
-        </div>
-        <div>
-          <strong>안내 방식</strong>
-          <span>${escapeHtml(guidanceLabel)}</span>
-        </div>
-        <div>
-          <strong>주요 제한</strong>
-          <span>${escapeHtml(risk)}</span>
-        </div>
+      <div class="app-tags">
+        ${app.requires.slice(0, 3).map((r) => `<span class="app-tag">${escapeHtml(label(REQUIRE_LABELS, r))}</span>`).join("")}
       </div>
-      <span class="app-link">${escapeHtml(app.marketplace.ctaLabel)} &rarr;</span>
+      <span class="app-link">자세히 보기 &rarr;</span>
     </article>
   `;
 }
