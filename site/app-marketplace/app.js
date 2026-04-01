@@ -132,26 +132,29 @@ function buildRequestPayload({ form, catalog, config }) {
   const matchedApp = catalog.publicApps.find((app) => app.name === requestedAppName);
 
   return {
-    submittedAt: new Date().toISOString(),
-    source: config.source || "extensions.liveklass.com",
-    siteUrl: String(formData.get("siteUrl") ?? "").trim(),
-    contactChannel: String(formData.get("contactChannel") ?? "").trim(),
-    requestedAppId: matchedApp?.id ?? null,
-    requestedAppName,
-    desiredLaunchWindow: String(formData.get("desiredLaunchWindow") ?? "").trim(),
-    problemStatement: String(formData.get("problemStatement") ?? "").trim(),
-    accessMode: matchedApp?.accessMode ?? null
+    site_url: String(formData.get("siteUrl") ?? "").trim(),
+    contact_channel: String(formData.get("contactChannel") ?? "").trim(),
+    requested_app_id: matchedApp?.id ?? null,
+    requested_app_name: requestedAppName,
+    desired_launch_window: String(formData.get("desiredLaunchWindow") ?? "").trim(),
+    problem_statement: String(formData.get("problemStatement") ?? "").trim(),
+    source: config.source || "extensions.liveklass.com"
   };
 }
 
 async function submitRequest({ payload, config }) {
-  if (!config.requestEndpoint) {
+  if (!config.supabaseUrl || !config.supabaseAnonKey) {
     throw new Error("REQUEST_ENDPOINT_MISSING");
   }
 
-  const response = await fetch(config.requestEndpoint, {
+  const response = await fetch(`${config.supabaseUrl}/rest/v1/requests`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      "apikey": config.supabaseAnonKey,
+      "Authorization": `Bearer ${config.supabaseAnonKey}`,
+      "Prefer": "return=minimal"
+    },
     body: JSON.stringify(payload)
   });
 
@@ -210,7 +213,7 @@ function main() {
   appSelect.innerHTML = `${catalog.publicApps.map(renderOption).join("\n")}\n<option>기타</option>`;
   publicSummary.textContent = `공개 카탈로그에는 검증을 통과한 앱만 노출합니다. 현재 비공개 운영형 확장 기능은 ${catalog.privateApps.length}개입니다.`;
 
-  if (!config.requestEndpoint) {
+  if (!config.supabaseAnonKey) {
     setStatus(formStatus, "현재 요청 접수 준비 중입니다. 곧 활성화될 예정입니다.");
   }
 
