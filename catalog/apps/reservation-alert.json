@@ -4,8 +4,10 @@
   "type": "ui-embed",
   "status": "active",
   "visibility": "public",
-  "accessMode": "request-setup",
-  "supportModel": "liveklass-managed",
+  "accessMode": "self-serve",
+  "supportModel": "self-serve-first",
+  "guideUrl": null,
+  "demoUrl": null,
   "summary": "이벤트 페이지와 카카오싱크를 이용해 강의 오픈 전 예약과 오픈 알림을 운영으로 우회한다.",
   "delivery": [
     "page-html",
@@ -44,7 +46,7 @@
   "marketplace": {
     "category": "marketing",
     "guidanceMode": "request-review",
-    "ctaLabel": "설치 요청",
+    "ctaLabel": "적용 가이드",
     "listed": true
   }
 }

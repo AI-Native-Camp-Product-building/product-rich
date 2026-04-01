@@ -54,31 +54,28 @@ function escapeHtml(value) {
 }
 
 function renderCard(app) {
-  const requirements = app.requires.slice(0, 3).map((r) => label(REQUIRE_LABELS, r)).join(", ");
-  const risk = app.risks[0]?.description ?? "제한 사항은 상담 과정에서 안내됩니다.";
   const categoryIcon = CATEGORY_ICONS[app.marketplace.category] ?? "";
   const categoryLabel = label(CATEGORY_LABELS, app.marketplace.category);
-  const guidanceLabel = label(GUIDANCE_LABELS, app.marketplace.guidanceMode);
 
   return `
     <article class="app-card" data-app-id="${escapeHtml(app.id)}" data-category="${escapeHtml(app.marketplace.category)}">
       <div class="app-top">
         <div class="card-kicker"><span class="card-icon">${categoryIcon}</span> ${escapeHtml(categoryLabel)}</div>
-        <div class="app-status">${escapeHtml(app.marketplace.ctaLabel)}</div>
+        <div class="app-status app-status--beta">베타</div>
       </div>
       <h3>${escapeHtml(app.name)}</h3>
       <p>${escapeHtml(app.summary)}</p>
       <div class="app-tags">
-        ${app.requires.slice(0, 3).map((r) => `<span class="app-tag">${escapeHtml(label(REQUIRE_LABELS, r))}</span>`).join("")}
+        <span class="app-tag app-tag--free">무료</span>
+        ${app.requires.slice(0, 2).map((r) => `<span class="app-tag">${escapeHtml(label(REQUIRE_LABELS, r))}</span>`).join("")}
       </div>
-      <span class="app-link">자세히 보기 &rarr;</span>
+      <span class="app-link">${app.guideUrl ? "적용 가이드 보기" : "상세 보기"} &rarr;</span>
     </article>
   `;
 }
 
 function renderDetailModal(app) {
   const requires = app.requires.map((r) => `<li>${escapeHtml(label(REQUIRE_LABELS, r))}</li>`).join("");
-  const configs = app.customerConfig.map((c) => `<li>${escapeHtml(c)}</li>`).join("");
   const risks = app.risks
     .map(
       (r) =>
@@ -89,27 +86,40 @@ function renderDetailModal(app) {
   const categoryIcon = CATEGORY_ICONS[app.marketplace.category] ?? "";
   const categoryLabel = label(CATEGORY_LABELS, app.marketplace.category);
 
+  const demoSection = app.demoUrl
+    ? `<a class="modal-cta modal-cta--demo" href="${escapeHtml(app.demoUrl)}" target="_blank">데모 페이지 보기 &rarr;</a>`
+    : "";
+
+  const guideSection = app.guideUrl
+    ? `<a class="modal-cta modal-cta--guide" href="${escapeHtml(app.guideUrl)}" target="_blank">적용 가이드 보기 &rarr;</a>`
+    : `<div class="modal-notice">적용 가이드를 준비 중입니다. 지원 요청을 남겨주시면 직접 안내해드립니다.</div>`;
+
   return `
-    <div class="card-kicker"><span class="card-icon">${categoryIcon}</span> ${escapeHtml(categoryLabel)}</div>
+    <div class="modal-top-badges">
+      <span class="modal-badge">무료</span>
+      <span class="modal-badge">베타</span>
+      <span class="modal-badge">${categoryIcon} ${escapeHtml(categoryLabel)}</span>
+    </div>
     <h2>${escapeHtml(app.name)}</h2>
     <p class="modal-summary">${escapeHtml(app.summary)}</p>
-    <div class="detail-section">
-      <h4>제공 방식</h4>
-      <ul class="detail-list">${delivery}</ul>
-    </div>
+    ${demoSection}
+    ${guideSection}
     <div class="detail-section">
       <h4>적용 조건</h4>
       <ul class="detail-list">${requires}</ul>
     </div>
     <div class="detail-section">
-      <h4>고객사 설정 항목</h4>
-      <ul class="detail-list">${configs}</ul>
+      <h4>제공 방식</h4>
+      <ul class="detail-list">${delivery}</ul>
     </div>
     <div class="detail-section">
-      <h4>제한 사항</h4>
+      <h4>알려진 제한 사항</h4>
       <ul class="risk-list">${risks}</ul>
     </div>
-    <button class="modal-cta" data-app-name="${escapeHtml(app.name)}">${escapeHtml(app.marketplace.ctaLabel)}</button>
+    <div class="modal-actions">
+      <button class="modal-cta" data-app-name="${escapeHtml(app.name)}">지원 요청하기</button>
+      <button class="modal-cta modal-cta--feedback" data-app-id="${escapeHtml(app.id)}" data-app-name="${escapeHtml(app.name)}">피드백 보내기</button>
+    </div>
   `;
 }
 
@@ -211,10 +221,10 @@ function main() {
 
   appGrid.innerHTML = catalog.publicApps.map(renderCard).join("\n");
   appSelect.innerHTML = `${catalog.publicApps.map(renderOption).join("\n")}\n<option>기타</option>`;
-  publicSummary.textContent = `공개 카탈로그에는 검증을 통과한 앱만 노출합니다. 현재 비공개 운영형 확장 기능은 ${catalog.privateApps.length}개입니다.`;
+  publicSummary.textContent = `모든 확장 기능은 무료 베타로 제공됩니다. 가이드를 따라 직접 적용하거나, 어려운 부분은 지원을 요청하세요.`;
 
   if (!config.supabaseAnonKey) {
-    setStatus(formStatus, "현재 요청 접수 준비 중입니다. 곧 활성화될 예정입니다.");
+    setStatus(formStatus, "지원 요청 시스템을 준비 중입니다. 곧 활성화될 예정입니다.");
   }
 
   // 카드 클릭 → 모달
@@ -268,10 +278,10 @@ function main() {
       });
       requestForm.reset();
       appSelect.innerHTML = `${catalog.publicApps.map(renderOption).join("\n")}\n<option>기타</option>`;
-      setStatus(formStatus, "요청이 접수되었습니다. 내부 팀이 확인 후 안내드릴 예정입니다.", "success");
+      setStatus(formStatus, "지원 요청이 접수되었습니다. 확인 후 안내드릴게요.", "success");
     } catch (error) {
       if (error instanceof Error && error.message === "REQUEST_ENDPOINT_MISSING") {
-        setStatus(formStatus, "요청 접수 시스템이 아직 준비 중입니다. 잠시 후 다시 시도해 주세요.", "error");
+        setStatus(formStatus, "지원 요청 시스템이 아직 준비 중입니다. 잠시 후 다시 시도해 주세요.", "error");
       } else {
         setStatus(formStatus, "요청 전송에 실패했습니다. 잠시 후 다시 시도해 주세요.", "error");
       }

@@ -709,20 +709,98 @@ button.button {
 .modal-body .risk-level[data-level="medium"] { color: #b5772f; }
 .modal-body .risk-level[data-level="low"] { color: #1c7c54; }
 
+/* Modal badges */
+.modal-top-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.modal-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 10px;
+  border-radius: 999px;
+  background: #f0f0f0;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+/* Modal notice (guide not ready) */
+.modal-notice {
+  padding: 16px 20px;
+  border-radius: 16px;
+  background: #f8f8f8;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 0.94rem;
+  line-height: 1.5;
+  margin-bottom: 24px;
+}
+
+/* Modal actions */
+.modal-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+
 .modal-body .modal-cta {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 52px;
-  padding: 0 28px;
+  min-height: 48px;
+  padding: 0 24px;
   border-radius: 999px;
   background: var(--accent);
   color: var(--text-inverse);
-  font-weight: 700;
+  font-weight: 600;
   border: none;
   cursor: pointer;
   font: inherit;
-  margin-top: 12px;
+  font-size: 0.94rem;
+}
+
+.modal-body .modal-cta--demo {
+  background: var(--text-primary);
+  color: var(--text-inverse);
+  text-decoration: none;
+  margin-bottom: 12px;
+}
+
+.modal-body .modal-cta--guide {
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  text-decoration: none;
+  margin-bottom: 24px;
+}
+
+.modal-body .modal-cta--feedback {
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+
+/* App card beta badge */
+.app-status--beta {
+  background: #f0f0f0;
+  color: var(--text-muted);
+}
+
+.app-status--beta::before {
+  background: #7a7a7a;
+}
+
+/* Free tag */
+.app-tag--free {
+  background: #e8f5e9;
+  color: #2e7d32;
+  font-weight: 600;
 }
 
 /* === Tablet === */

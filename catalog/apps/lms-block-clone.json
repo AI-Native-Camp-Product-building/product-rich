@@ -4,8 +4,10 @@
   "type": "hosted-page",
   "status": "verified",
   "visibility": "public",
-  "accessMode": "request-setup",
-  "supportModel": "liveklass-managed",
+  "accessMode": "self-serve",
+  "supportModel": "self-serve-first",
+  "guideUrl": null,
+  "demoUrl": null,
   "summary": "외부 호스팅 페이지와 라이브클래스 바디 코드를 조합해 타 LMS 스타일 블록을 재현한다.",
   "delivery": [
     "external-hosting",
@@ -42,7 +44,7 @@
   "marketplace": {
     "category": "design",
     "guidanceMode": "request-review",
-    "ctaLabel": "설치 요청",
+    "ctaLabel": "적용 가이드",
     "listed": true
   }
 }

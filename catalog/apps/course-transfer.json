@@ -4,8 +4,10 @@
   "type": "ops-automation",
   "status": "active",
   "visibility": "private",
-  "accessMode": "managed-service",
-  "supportModel": "liveklass-managed",
+  "accessMode": "self-serve",
+  "supportModel": "self-serve-first",
+  "guideUrl": null,
+  "demoUrl": null,
   "summary": "0원 쿠폰과 운영 자동화를 이용해 사이트 간 수강 이전을 우회한다.",
   "delivery": [
     "google-sheet",
