@@ -1,0 +1,7 @@
+node_modules
+.DS_Store
+.omc/
+
+# 빌드 산출물
+site/app-marketplace/catalog.json
+site/app-marketplace/catalog.js

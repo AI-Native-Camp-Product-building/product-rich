@@ -1,0 +1,10 @@
+{
+  "name": "liveklass-extensions-marketplace",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build-marketplace.mjs",
+    "serve": "python3 -m http.server 4173 -d site/app-marketplace",
+    "import:feature-workarounds": "node scripts/import-feature-workarounds.mjs"
+  }
+}

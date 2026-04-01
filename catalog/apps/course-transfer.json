@@ -1,0 +1,52 @@
+{
+  "id": "course-transfer",
+  "name": "수강 이전",
+  "type": "ops-automation",
+  "status": "active",
+  "visibility": "private",
+  "accessMode": "managed-service",
+  "supportModel": "liveklass-managed",
+  "summary": "0원 쿠폰과 운영 자동화를 이용해 사이트 간 수강 이전을 우회한다.",
+  "delivery": [
+    "google-sheet",
+    "google-form",
+    "skill-automation",
+    "message-delivery"
+  ],
+  "requires": [
+    "site-admin-access",
+    "coupon-bulk-generation",
+    "google-sheets",
+    "solapi-account"
+  ],
+  "customerConfig": [
+    "sheetId",
+    "requestSheetName",
+    "couponSheetName",
+    "senderNumber",
+    "messageTemplate",
+    "classUrl"
+  ],
+  "risks": [
+    {
+      "level": "high",
+      "label": "coupon-leakage",
+      "description": "쿠폰 코드 유출 시 무료 수강이 가능하다."
+    },
+    {
+      "level": "medium",
+      "label": "customer-hardcoding",
+      "description": "현재 자동화 스킬이 특정 고객사 값에 하드코딩되어 있다."
+    }
+  ],
+  "evidencePaths": [
+    "evidence/"
+  ],
+  "implementationGuide": "implementation/guide.md",
+  "marketplace": {
+    "category": "migration",
+    "guidanceMode": "managed-service",
+    "ctaLabel": "상담 요청",
+    "listed": true
+  }
+}

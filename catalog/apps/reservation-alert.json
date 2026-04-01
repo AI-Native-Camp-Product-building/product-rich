@@ -1,0 +1,50 @@
+{
+  "id": "reservation-alert",
+  "name": "강의 예약 알림",
+  "type": "ui-embed",
+  "status": "active",
+  "visibility": "public",
+  "accessMode": "request-setup",
+  "supportModel": "liveklass-managed",
+  "summary": "이벤트 페이지와 카카오싱크를 이용해 강의 오픈 전 예약과 오픈 알림을 운영으로 우회한다.",
+  "delivery": [
+    "page-html",
+    "external-iframe",
+    "body-code"
+  ],
+  "requires": [
+    "site-admin-access",
+    "kakao-sync",
+    "biz-message-account"
+  ],
+  "customerConfig": [
+    "siteUrl",
+    "pageSlug",
+    "campaignTitle",
+    "targetDateTime",
+    "signupUrl",
+    "countdownEmbedUrl"
+  ],
+  "risks": [
+    {
+      "level": "medium",
+      "label": "froala-strip",
+      "description": "Froala 에디터가 script와 일부 속성을 제거하므로 동적 기능은 제한된다."
+    },
+    {
+      "level": "medium",
+      "label": "external-iframe-dependency",
+      "description": "카운트다운이 외부 iframe 서비스에 의존한다."
+    }
+  ],
+  "evidencePaths": [
+    "evidence/"
+  ],
+  "implementationGuide": "implementation/guide.md",
+  "marketplace": {
+    "category": "marketing",
+    "guidanceMode": "request-review",
+    "ctaLabel": "설치 요청",
+    "listed": true
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "id": "lms-block-clone",
+  "name": "LMS 블록 클론",
+  "type": "hosted-page",
+  "status": "verified",
+  "visibility": "public",
+  "accessMode": "request-setup",
+  "supportModel": "liveklass-managed",
+  "summary": "외부 호스팅 페이지와 라이브클래스 바디 코드를 조합해 타 LMS 스타일 블록을 재현한다.",
+  "delivery": [
+    "external-hosting",
+    "iframe",
+    "body-code"
+  ],
+  "requires": [
+    "site-admin-access",
+    "custom-html-access",
+    "static-hosting"
+  ],
+  "customerConfig": [
+    "siteUrl",
+    "pageSlug",
+    "markerText",
+    "iframeSrc",
+    "floatingBarCtaHref",
+    "configRepo"
+  ],
+  "risks": [
+    {
+      "level": "medium",
+      "label": "responsive-maintenance",
+      "description": "반응형과 레이아웃 유지보수를 직접 해야 한다."
+    },
+    {
+      "level": "medium",
+      "label": "hosted-page-cache",
+      "description": "외부 호스팅과 캐시 반영 지연을 고려해야 한다."
+    }
+  ],
+  "evidencePaths": [],
+  "implementationGuide": "implementation/",
+  "marketplace": {
+    "category": "design",
+    "guidanceMode": "request-review",
+    "ctaLabel": "설치 요청",
+    "listed": true
+  }
+}
