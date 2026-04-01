@@ -1,0 +1,6 @@
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": "site/app-marketplace",
+  "installCommand": null,
+  "framework": null
+}

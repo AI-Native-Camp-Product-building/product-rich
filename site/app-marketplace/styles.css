@@ -51,7 +51,7 @@ a { color: inherit; text-decoration: none; }
   letter-spacing: 0.08em; text-transform: uppercase; font-weight: 800;
 }
 .eyebrow::before, .section-kicker::before, .card-kicker::before { content: ""; width: 28px; height: 1px; background: currentColor; }
-.hero h1 { margin: 18px 0 16px; max-width: 8.6ch; font-size: clamp(3.1rem, 6vw, 5.2rem); line-height: 1.02; letter-spacing: -0.05em; font-weight: 800; }
+.hero h1 { margin: 18px 0 16px; max-width: 18ch; font-size: clamp(2.2rem, 4vw, 3.4rem); line-height: 1.18; letter-spacing: -0.04em; font-weight: 800; }
 .hero p, .section-header p, .problem-card p, .app-card p, .request-copy p { color: var(--text-muted); line-height: 1.68; }
 .hero-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 28px; }
 .hero-note { margin-top: 18px; color: #847975; font-size: 0.92rem; line-height: 1.64; }
@@ -81,13 +81,17 @@ a { color: inherit; text-decoration: none; }
   margin-top: 22px; display: inline-flex; align-items: center; justify-content: center; min-height: 52px; padding: 0 24px;
   border-radius: 999px; border: 1px solid rgba(255,255,255,0.32); background: rgba(255,255,255,0.08); color: #fff; font-weight: 700;
 }
-.section { padding: 52px 0 0; }
+.section { padding: 64px 0 0; }
+.section + .section { border-top: 1px solid var(--border); margin-top: 24px; padding-top: 64px; }
 .section-header { display: grid; grid-template-columns: 1fr auto; gap: 20px; align-items: end; margin-bottom: 20px; }
 .section-header h2, .request-copy h2 { margin: 14px 0 0; font-size: clamp(2rem, 4vw, 3rem); line-height: 1.08; letter-spacing: -0.045em; font-weight: 800; }
 .problem-grid { grid-template-columns: repeat(3, 1fr); gap: 18px; }
-.app-grid { grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.app-grid { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 18px; }
 .problem-card, .app-card, .request-shell, .form-shell { border-radius: 28px; border: 1px solid var(--border); background: var(--surface); }
 .problem-card, .app-card { padding: 24px; }
+.app-card { cursor: pointer; transition: transform 0.18s ease, box-shadow 0.18s ease; }
+.app-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(45, 28, 21, 0.10); }
+.card-icon { font-style: normal; margin-right: 2px; }
 .problem-index { color: #9a8e87; font-size: 0.82rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 800; }
 .problem-card h3, .app-card h3 { margin: 14px 0 12px; font-size: 1.2rem; line-height: 1.42; }
 .app-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }

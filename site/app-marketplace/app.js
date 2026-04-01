@@ -1,3 +1,49 @@
+// --- 한글 매핑 ---
+
+const REQUIRE_LABELS = {
+  "site-admin-access": "사이트 관리자 권한",
+  "kakao-sync": "카카오싱크 연동",
+  "biz-message-account": "비즈메시지 계정",
+  "custom-html-access": "커스텀 HTML 접근",
+  "static-hosting": "정적 호스팅",
+  "coupon-bulk-generation": "쿠폰 대량 생성",
+  "google-sheets": "Google Sheets",
+  "solapi-account": "솔라피 계정"
+};
+
+const DELIVERY_LABELS = {
+  "page-html": "페이지 HTML",
+  "external-iframe": "외부 iframe",
+  "body-code": "바디 코드",
+  "external-hosting": "외부 호스팅",
+  "iframe": "iframe 삽입",
+  "google-sheet": "Google Sheet",
+  "google-form": "Google Form",
+  "skill-automation": "스킬 자동화",
+  "message-delivery": "메시지 발송"
+};
+
+const GUIDANCE_LABELS = {
+  "request-review": "요청 후 검토",
+  "managed-service": "운영 대행"
+};
+
+const CATEGORY_LABELS = {
+  "marketing": "마케팅",
+  "design": "디자인",
+  "migration": "이전/마이그레이션"
+};
+
+const CATEGORY_ICONS = {
+  "marketing": "&#128226;",
+  "design": "&#127912;",
+  "migration": "&#128640;"
+};
+
+function label(map, key) {
+  return map[key] ?? key;
+}
+
 function escapeHtml(value) {
   return String(value)
     .replaceAll("&", "&amp;")
@@ -8,13 +54,16 @@ function escapeHtml(value) {
 }
 
 function renderCard(app) {
-  const requirements = app.requires.slice(0, 3).join(", ");
+  const requirements = app.requires.slice(0, 3).map((r) => label(REQUIRE_LABELS, r)).join(", ");
   const risk = app.risks[0]?.description ?? "제한 사항은 상담 과정에서 안내됩니다.";
+  const categoryIcon = CATEGORY_ICONS[app.marketplace.category] ?? "";
+  const categoryLabel = label(CATEGORY_LABELS, app.marketplace.category);
+  const guidanceLabel = label(GUIDANCE_LABELS, app.marketplace.guidanceMode);
 
   return `
-    <article class="app-card" data-app-id="${escapeHtml(app.id)}">
+    <article class="app-card" data-app-id="${escapeHtml(app.id)}" data-category="${escapeHtml(app.marketplace.category)}">
       <div class="app-top">
-        <div class="card-kicker">${escapeHtml(app.marketplace.category)}</div>
+        <div class="card-kicker"><span class="card-icon">${categoryIcon}</span> ${escapeHtml(categoryLabel)}</div>
         <div class="app-status">${escapeHtml(app.marketplace.ctaLabel)}</div>
       </div>
       <h3>${escapeHtml(app.name)}</h3>
@@ -26,20 +75,20 @@ function renderCard(app) {
         </div>
         <div>
           <strong>안내 방식</strong>
-          <span>${escapeHtml(app.marketplace.guidanceMode)}</span>
+          <span>${escapeHtml(guidanceLabel)}</span>
         </div>
         <div>
           <strong>주요 제한</strong>
           <span>${escapeHtml(risk)}</span>
         </div>
       </div>
-      <span class="app-link">${escapeHtml(app.marketplace.ctaLabel)}</span>
+      <span class="app-link">${escapeHtml(app.marketplace.ctaLabel)} &rarr;</span>
     </article>
   `;
 }
 
 function renderDetailModal(app) {
-  const requires = app.requires.map((r) => `<li>${escapeHtml(r)}</li>`).join("");
+  const requires = app.requires.map((r) => `<li>${escapeHtml(label(REQUIRE_LABELS, r))}</li>`).join("");
   const configs = app.customerConfig.map((c) => `<li>${escapeHtml(c)}</li>`).join("");
   const risks = app.risks
     .map(
@@ -47,10 +96,12 @@ function renderDetailModal(app) {
         `<li><span class="risk-level" data-level="${escapeHtml(r.level)}">${escapeHtml(r.level)}</span>${escapeHtml(r.description)}</li>`
     )
     .join("");
-  const delivery = app.delivery.map((d) => `<li>${escapeHtml(d)}</li>`).join("");
+  const delivery = app.delivery.map((d) => `<li>${escapeHtml(label(DELIVERY_LABELS, d))}</li>`).join("");
+  const categoryIcon = CATEGORY_ICONS[app.marketplace.category] ?? "";
+  const categoryLabel = label(CATEGORY_LABELS, app.marketplace.category);
 
   return `
-    <div class="card-kicker">${escapeHtml(app.marketplace.category)}</div>
+    <div class="card-kicker"><span class="card-icon">${categoryIcon}</span> ${escapeHtml(categoryLabel)}</div>
     <h2>${escapeHtml(app.name)}</h2>
     <p class="modal-summary">${escapeHtml(app.summary)}</p>
     <div class="detail-section">
