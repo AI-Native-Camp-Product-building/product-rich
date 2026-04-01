@@ -244,14 +244,92 @@ function main() {
     if (event.key === "Escape") closeModal();
   });
 
-  // 모달 내 CTA → 폼 앱 자동 선택
+  // 모달 내 CTA
   document.getElementById("modal-body").addEventListener("click", (event) => {
-    const ctaButton = event.target.closest(".modal-cta");
-    if (!ctaButton) return;
-    const appName = ctaButton.dataset.appName;
-    closeModal();
-    selectAppInForm(appName);
+    // 지원 요청 → 폼으로 이동
+    const ctaButton = event.target.closest(".modal-cta:not(.modal-cta--feedback):not(.modal-cta--guide):not(.modal-cta--demo)");
+    if (ctaButton && ctaButton.dataset.appName) {
+      const appName = ctaButton.dataset.appName;
+      closeModal();
+      selectAppInForm(appName);
+      return;
+    }
+
+    // 피드백 보내기
+    const feedbackBtn = event.target.closest(".modal-cta--feedback");
+    if (feedbackBtn) {
+      const appId = feedbackBtn.dataset.appId;
+      const appName = feedbackBtn.dataset.appName;
+      showFeedbackForm(appId, appName);
+      return;
+    }
+
+    // 피드백 폼 제출
+    const feedbackSubmit = event.target.closest(".feedback-submit");
+    if (feedbackSubmit) {
+      const appId = feedbackSubmit.dataset.appId;
+      const appName = feedbackSubmit.dataset.appName;
+      submitFeedback(appId, appName);
+      return;
+    }
   });
+
+  function showFeedbackForm(appId, appName) {
+    const actions = document.querySelector(".modal-actions");
+    if (!actions) return;
+    actions.innerHTML = `
+      <div class="feedback-form">
+        <textarea class="feedback-input" id="feedback-message" placeholder="이 기능에 대한 의견이나 개선 아이디어를 알려주세요." rows="3"></textarea>
+        <input class="feedback-contact" id="feedback-contact" type="text" placeholder="연락처 (선택, 회신이 필요하면 입력)" />
+        <div class="feedback-form-actions">
+          <button class="modal-cta feedback-submit" data-app-id="${escapeHtml(appId)}" data-app-name="${escapeHtml(appName)}">피드백 보내기</button>
+          <div class="feedback-status" id="feedback-status"></div>
+        </div>
+      </div>
+    `;
+    document.getElementById("feedback-message").focus();
+  }
+
+  async function submitFeedback(appId, appName) {
+    const message = document.getElementById("feedback-message")?.value?.trim();
+    const contact = document.getElementById("feedback-contact")?.value?.trim();
+    const statusEl = document.getElementById("feedback-status");
+
+    if (!message) {
+      if (statusEl) statusEl.textContent = "내용을 입력해주세요.";
+      return;
+    }
+
+    if (statusEl) statusEl.textContent = "전송 중...";
+
+    try {
+      const response = await fetch(`${config.supabaseUrl}/rest/v1/feedback`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": config.supabaseAnonKey,
+          "Authorization": `Bearer ${config.supabaseAnonKey}`,
+          "Prefer": "return=minimal"
+        },
+        body: JSON.stringify({
+          app_id: appId,
+          app_name: appName,
+          message,
+          contact: contact || null,
+          source: config.source || "extensions.liveklass.com"
+        })
+      });
+
+      if (!response.ok) throw new Error(`FEEDBACK_FAILED_${response.status}`);
+
+      const actions = document.querySelector(".modal-actions");
+      if (actions) {
+        actions.innerHTML = `<div class="feedback-success">피드백을 보내주셔서 감사합니다! 개선에 반영하겠습니다.</div>`;
+      }
+    } catch (error) {
+      if (statusEl) statusEl.textContent = "전송에 실패했습니다. 잠시 후 다시 시도해주세요.";
+    }
+  }
 
   // URL hash 딥링크
   function handleHash() {
