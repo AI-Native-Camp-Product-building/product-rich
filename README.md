@@ -10,7 +10,7 @@
 
 ## 링크
 
-- GitHub: `https://github.com/Rich00lee/liveklass-extensions-marketplace`
+- GitHub: `https://github.com/Rich00lee/product-rich`
 - Vercel: `https://liveklass-extensions-marketplace.vercel.app`
 
 ## 목적
