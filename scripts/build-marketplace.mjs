@@ -21,9 +21,11 @@ const REQUIRED_TOP_LEVEL_FIELDS = [
   "requires",
   "customerConfig",
   "risks",
-  "implementationGuide",
   "marketplace"
 ];
+
+// 카테고리 정렬 순서
+const CATEGORY_ORDER = ["design", "hide", "addon", "automation"];
 
 function ensure(condition, message) {
   if (!condition) {
@@ -36,14 +38,39 @@ function loadApps() {
     .filter((name) => name.endsWith(".json"))
     .map((name) => {
       const app = JSON.parse(readFileSync(path.join(catalogDir, name), "utf8"));
+
+      // 필수 필드 검증
       for (const field of REQUIRED_TOP_LEVEL_FIELDS) {
         ensure(field in app, `${name}: missing field "${field}"`);
       }
       ensure(typeof app.marketplace.guidanceMode === "string", `${name}: marketplace.guidanceMode must be a string`);
       ensure(typeof app.marketplace.ctaLabel === "string", `${name}: marketplace.ctaLabel must be a string`);
+
+      // appType 기본값
+      if (!app.appType) {
+        app.appType = "single";
+      }
+
+      // bundle 검증
+      if (app.appType === "bundle") {
+        ensure(Array.isArray(app.features) && app.features.length > 0, `${name}: bundle app must have non-empty features array`);
+        for (const feature of app.features) {
+          ensure(typeof feature.id === "string", `${name}: feature must have string id`);
+          ensure(typeof feature.name === "string", `${name}: feature must have string name`);
+        }
+      }
+
       return app;
     })
-    .sort((left, right) => left.name.localeCompare(right.name, "ko"));
+    .sort((left, right) => {
+      // 카테고리 순서 우선, 같은 카테고리 내에서 한글 이름순
+      const catA = CATEGORY_ORDER.indexOf(left.marketplace.category);
+      const catB = CATEGORY_ORDER.indexOf(right.marketplace.category);
+      const orderA = catA === -1 ? 999 : catA;
+      const orderB = catB === -1 ? 999 : catB;
+      if (orderA !== orderB) return orderA - orderB;
+      return left.name.localeCompare(right.name, "ko");
+    });
 }
 
 function buildCatalog(apps) {
@@ -73,6 +100,7 @@ function main() {
 
   console.log(`Generated site/app-marketplace/catalog.json`);
   console.log(`Generated site/app-marketplace/catalog.js`);
+  console.log(`  Total: ${catalog.totals.all} apps (${catalog.totals.public} public, ${catalog.totals.private} private)`);
 }
 
 main();

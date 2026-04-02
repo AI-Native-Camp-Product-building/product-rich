@@ -1,0 +1,31 @@
+{
+  "id": "notice-banner",
+  "name": "공지 배너",
+  "appType": "single",
+  "type": "ui-embed",
+  "status": "planned",
+  "visibility": "public",
+  "accessMode": "self-serve",
+  "supportModel": "self-serve-first",
+  "guideUrl": null,
+  "demoUrl": null,
+  "summary": "페이지 내에 공지사항을 안내하는 배너 블록을 추가합니다.",
+  "delivery": ["body-code"],
+  "requires": ["site-admin-access"],
+  "customerConfig": ["siteUrl", "noticeText", "noticeStyle"],
+  "risks": [
+    {
+      "level": "low",
+      "label": "content-overlap",
+      "description": "기존 페이지 콘텐츠와 겹칠 수 있어 위치 조정이 필요하다."
+    }
+  ],
+  "evidencePaths": [],
+  "implementationGuide": null,
+  "marketplace": {
+    "category": "addon",
+    "guidanceMode": "request-review",
+    "ctaLabel": "적용 가이드",
+    "listed": true
+  }
+}

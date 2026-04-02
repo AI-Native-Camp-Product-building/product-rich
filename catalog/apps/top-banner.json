@@ -1,0 +1,31 @@
+{
+  "id": "top-banner",
+  "name": "상단 띠배너",
+  "appType": "single",
+  "type": "ui-embed",
+  "status": "planned",
+  "visibility": "public",
+  "accessMode": "self-serve",
+  "supportModel": "self-serve-first",
+  "guideUrl": null,
+  "demoUrl": null,
+  "summary": "사이트 최상단에 프로모션, 공지 등을 안내하는 띠배너를 추가합니다.",
+  "delivery": ["body-code"],
+  "requires": ["site-admin-access"],
+  "customerConfig": ["siteUrl", "bannerText", "bannerColor", "linkUrl"],
+  "risks": [
+    {
+      "level": "low",
+      "label": "layout-shift",
+      "description": "띠배너 높이만큼 페이지 레이아웃이 밀릴 수 있다."
+    }
+  ],
+  "evidencePaths": [],
+  "implementationGuide": null,
+  "marketplace": {
+    "category": "addon",
+    "guidanceMode": "request-review",
+    "ctaLabel": "적용 가이드",
+    "listed": true
+  }
+}

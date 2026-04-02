@@ -1,0 +1,61 @@
+{
+  "id": "element-hide",
+  "name": "요소 숨김",
+  "appType": "bundle",
+  "type": "css-customization",
+  "status": "active",
+  "visibility": "public",
+  "accessMode": "self-serve",
+  "supportModel": "self-serve-first",
+  "guideUrl": null,
+  "demoUrl": null,
+  "summary": "불필요한 영역이나 정보를 숨기는 기능 모음. CSS 바디코드로 개별 고객사에 적용합니다.",
+  "delivery": ["body-code"],
+  "requires": ["site-admin-access"],
+  "customerConfig": ["siteUrl"],
+  "risks": [
+    {
+      "level": "low",
+      "label": "platform-update",
+      "description": "라이브클래스 업데이트 시 CSS 선택자가 변경되어 적용이 풀릴 수 있다."
+    }
+  ],
+  "evidencePaths": [],
+  "implementationGuide": null,
+  "features": [
+    {
+      "id": "section-hide",
+      "name": "특정 영역 숨김",
+      "description": "추천 클래스, 리뷰, 강사소개 등 특정 영역을 숨깁니다.",
+      "notionTag": "영역 숨김",
+      "snippet": "TARGET_SELECTOR {\n  display: none !important;\n}"
+    },
+    {
+      "id": "text-value-hide",
+      "name": "특정 텍스트 값 숨김",
+      "description": "가격, 모집 인원 등 특정 텍스트 정보를 숨깁니다.",
+      "notionTag": "텍스트 변경",
+      "snippet": "/* 바디코드에 JS로 적용 (SPA 대응) */\n<script>\nconst observer = new MutationObserver(() => {\n  document.querySelectorAll('TARGET_SELECTOR').forEach(el => {\n    if (el.textContent.includes('숨길 텍스트')) {\n      el.style.display = 'none';\n    }\n  });\n});\nobserver.observe(document.body, { childList: true, subtree: true });\n</script>"
+    },
+    {
+      "id": "video-time-hide",
+      "name": "동영상 시간만 숨김",
+      "description": "클래스 상세 페이지에서 동영상 시간만 숨기고 개수는 표기합니다.",
+      "notionTag": "영역 숨김",
+      "snippet": ".video-duration,\n.lecture-time {\n  display: none !important;\n}"
+    },
+    {
+      "id": "video-count-time-hide",
+      "name": "동영상 개수/총시간 숨김",
+      "description": "클래스 상세 페이지에서 동영상 개수와 총시간 표기를 모두 숨깁니다.",
+      "notionTag": "영역 숨김",
+      "snippet": ".video-count,\n.video-duration,\n.lecture-time,\n.lecture-count {\n  display: none !important;\n}"
+    }
+  ],
+  "marketplace": {
+    "category": "hide",
+    "guidanceMode": "request-review",
+    "ctaLabel": "세부 기능 보기",
+    "listed": true
+  }
+}

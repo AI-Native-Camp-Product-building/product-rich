@@ -1,0 +1,31 @@
+{
+  "id": "floating-cta",
+  "name": "페이지 플로팅 CTA",
+  "appType": "single",
+  "type": "ui-embed",
+  "status": "active",
+  "visibility": "public",
+  "accessMode": "self-serve",
+  "supportModel": "self-serve-first",
+  "guideUrl": null,
+  "demoUrl": null,
+  "summary": "페이지 하단에 스크롤을 따라다니는 플로팅 CTA 버튼을 추가합니다.",
+  "delivery": ["body-code"],
+  "requires": ["site-admin-access"],
+  "customerConfig": ["siteUrl", "ctaText", "ctaLink", "ctaColor"],
+  "risks": [
+    {
+      "level": "low",
+      "label": "mobile-overlap",
+      "description": "모바일에서 하단 고정 요소와 겹칠 수 있다."
+    }
+  ],
+  "evidencePaths": [],
+  "implementationGuide": null,
+  "marketplace": {
+    "category": "addon",
+    "guidanceMode": "request-review",
+    "ctaLabel": "적용 가이드",
+    "listed": true
+  }
+}

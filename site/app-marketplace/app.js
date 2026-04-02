@@ -29,16 +29,20 @@ const GUIDANCE_LABELS = {
 };
 
 const CATEGORY_LABELS = {
-  "marketing": "마케팅",
-  "design": "디자인",
-  "migration": "이전/마이그레이션"
+  "design": "디자인 변경",
+  "hide": "요소 숨김",
+  "addon": "기능 추가",
+  "automation": "운영 자동화"
 };
 
 const CATEGORY_ICONS = {
-  "marketing": "&#128226;",
   "design": "&#127912;",
-  "migration": "&#128640;"
+  "hide": "&#128065;",
+  "addon": "&#9889;",
+  "automation": "&#128260;"
 };
+
+const CATEGORY_ORDER = ["design", "hide", "addon", "automation"];
 
 function label(map, key) {
   return map[key] ?? key;
@@ -53,10 +57,19 @@ function escapeHtml(value) {
     .replaceAll("'", "&#39;");
 }
 
+// --- 카드 렌더링 ---
+
 function renderCard(app) {
   const categoryIcon = CATEGORY_ICONS[app.marketplace.category] ?? "";
   const categoryLabel = label(CATEGORY_LABELS, app.marketplace.category);
 
+  if (app.appType === "bundle") {
+    return renderBundleCard(app, categoryIcon, categoryLabel);
+  }
+  return renderSingleCard(app, categoryIcon, categoryLabel);
+}
+
+function renderSingleCard(app, categoryIcon, categoryLabel) {
   return `
     <article class="app-card" data-app-id="${escapeHtml(app.id)}" data-category="${escapeHtml(app.marketplace.category)}">
       <div class="app-top">
@@ -74,7 +87,40 @@ function renderCard(app) {
   `;
 }
 
+function renderBundleCard(app, categoryIcon, categoryLabel) {
+  const featureCount = app.features ? app.features.length : 0;
+  // notionTag 기준으로 키워드 추출 (중복 제거)
+  const keywords = app.features
+    ? [...new Set(app.features.map((f) => f.notionTag))].join(" · ")
+    : "";
+
+  return `
+    <article class="app-card app-card--bundle" data-app-id="${escapeHtml(app.id)}" data-category="${escapeHtml(app.marketplace.category)}">
+      <div class="app-top">
+        <div class="card-kicker"><span class="card-icon">${categoryIcon}</span> ${escapeHtml(categoryLabel)}</div>
+        <div class="app-status app-status--bundle">${featureCount}개 기능</div>
+      </div>
+      <h3>${escapeHtml(app.name)}</h3>
+      <p class="bundle-keywords">${escapeHtml(keywords)}</p>
+      <div class="app-tags">
+        <span class="app-tag app-tag--free">무료</span>
+        <span class="app-tag">바디 코드</span>
+      </div>
+      <span class="app-link">세부 기능 보기 &rarr;</span>
+    </article>
+  `;
+}
+
+// --- 모달 렌더링 ---
+
 function renderDetailModal(app) {
+  if (app.appType === "bundle") {
+    return renderBundleModal(app);
+  }
+  return renderSingleModal(app);
+}
+
+function renderSingleModal(app) {
   const requires = app.requires.map((r) => `<li>${escapeHtml(label(REQUIRE_LABELS, r))}</li>`).join("");
   const risks = app.risks
     .map(
@@ -122,6 +168,106 @@ function renderDetailModal(app) {
     </div>
   `;
 }
+
+function renderBundleModal(app) {
+  const categoryIcon = CATEGORY_ICONS[app.marketplace.category] ?? "";
+  const categoryLabel = label(CATEGORY_LABELS, app.marketplace.category);
+  const featureCount = app.features ? app.features.length : 0;
+
+  const featuresHtml = (app.features || [])
+    .map((feature, index) => {
+      const isOpen = index === 0 ? "open" : "";
+      const snippetHtml = feature.snippet
+        ? `<div class="snippet-block">
+            <pre><code>${escapeHtml(feature.snippet)}</code></pre>
+            <button class="snippet-copy" data-snippet="${escapeHtml(feature.snippet)}" title="복사">복사</button>
+          </div>`
+        : "";
+      return `
+        <details class="accordion" ${isOpen}>
+          <summary class="accordion-header">
+            <span class="accordion-title">${escapeHtml(feature.name)}</span>
+            <span class="accordion-tag">${escapeHtml(feature.notionTag)}</span>
+          </summary>
+          <div class="accordion-body">
+            <p>${escapeHtml(feature.description)}</p>
+            ${snippetHtml}
+          </div>
+        </details>
+      `;
+    })
+    .join("");
+
+  const risks = app.risks
+    .map(
+      (r) =>
+        `<li><span class="risk-level" data-level="${escapeHtml(r.level)}">${escapeHtml(r.level)}</span>${escapeHtml(r.description)}</li>`
+    )
+    .join("");
+
+  return `
+    <div class="modal-top-badges">
+      <span class="modal-badge">무료</span>
+      <span class="modal-badge">베타</span>
+      <span class="modal-badge">${categoryIcon} ${escapeHtml(categoryLabel)}</span>
+      <span class="modal-badge">${featureCount}개 기능</span>
+    </div>
+    <h2>${escapeHtml(app.name)}</h2>
+    <p class="modal-summary">${escapeHtml(app.summary)}</p>
+    <div class="detail-section">
+      <h4>세부 기능</h4>
+      <div class="accordion-group">
+        ${featuresHtml}
+      </div>
+    </div>
+    <div class="detail-section">
+      <h4>알려진 제한 사항</h4>
+      <ul class="risk-list">${risks}</ul>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-cta" data-app-name="${escapeHtml(app.name)}">지원 요청하기</button>
+      <button class="modal-cta modal-cta--feedback" data-app-id="${escapeHtml(app.id)}" data-app-name="${escapeHtml(app.name)}">피드백 보내기</button>
+    </div>
+  `;
+}
+
+// --- 필터 탭 ---
+
+function renderFilterTabs(apps) {
+  const counts = { all: apps.length };
+  for (const cat of CATEGORY_ORDER) {
+    counts[cat] = apps.filter((a) => a.marketplace.category === cat).length;
+  }
+
+  const allTab = `<button class="filter-tab filter-tab--active" data-category="all">전체(${counts.all})</button>`;
+  const categoryTabs = CATEGORY_ORDER
+    .filter((cat) => counts[cat] > 0)
+    .map((cat) => {
+      const icon = CATEGORY_ICONS[cat] ?? "";
+      return `<button class="filter-tab" data-category="${cat}">${icon} ${escapeHtml(CATEGORY_LABELS[cat])}(${counts[cat]})</button>`;
+    })
+    .join("");
+
+  return `<div class="filter-tabs">${allTab}${categoryTabs}</div>`;
+}
+
+function filterByCategory(category) {
+  const cards = document.querySelectorAll(".app-card");
+  cards.forEach((card) => {
+    if (category === "all" || card.dataset.category === category) {
+      card.style.display = "";
+    } else {
+      card.style.display = "none";
+    }
+  });
+
+  const tabs = document.querySelectorAll(".filter-tab");
+  tabs.forEach((tab) => {
+    tab.classList.toggle("filter-tab--active", tab.dataset.category === category);
+  });
+}
+
+// --- 유틸 ---
 
 function renderOption(app) {
   return `<option value="${escapeHtml(app.name)}">${escapeHtml(app.name)}</option>`;
@@ -199,7 +345,7 @@ function selectAppInForm(appName) {
       break;
     }
   }
-  document.getElementById("request").scrollIntoView({ behavior: "smooth" });
+  document.getElementById("support").scrollIntoView({ behavior: "smooth" });
 }
 
 // --- 메인 ---
@@ -213,12 +359,24 @@ function main() {
 
   const allApps = [...catalog.publicApps, ...catalog.privateApps];
   const appGrid = document.getElementById("app-grid");
+  const filterContainer = document.getElementById("filter-container");
   const appSelect = document.getElementById("app-select");
   const publicSummary = document.getElementById("public-summary");
   const requestForm = document.getElementById("request-form");
   const submitButton = document.getElementById("request-submit");
   const formStatus = document.getElementById("form-status");
 
+  // 필터 탭 렌더링
+  if (filterContainer) {
+    filterContainer.innerHTML = renderFilterTabs(catalog.publicApps);
+    filterContainer.addEventListener("click", (event) => {
+      const tab = event.target.closest(".filter-tab");
+      if (!tab) return;
+      filterByCategory(tab.dataset.category);
+    });
+  }
+
+  // 카드 렌더링
   appGrid.innerHTML = catalog.publicApps.map(renderCard).join("\n");
   appSelect.innerHTML = `${catalog.publicApps.map(renderOption).join("\n")}\n<option>기타</option>`;
   publicSummary.textContent = `모든 확장 기능은 무료 베타로 제공됩니다. 가이드를 따라 직접 적용하거나, 어려운 부분은 지원을 요청하세요.`;
@@ -246,6 +404,17 @@ function main() {
 
   // 모달 내 CTA
   document.getElementById("modal-body").addEventListener("click", (event) => {
+    // 스니펫 복사
+    const copyBtn = event.target.closest(".snippet-copy");
+    if (copyBtn) {
+      const snippet = copyBtn.dataset.snippet;
+      navigator.clipboard.writeText(snippet).then(() => {
+        copyBtn.textContent = "복사됨!";
+        setTimeout(() => { copyBtn.textContent = "복사"; }, 1500);
+      });
+      return;
+    }
+
     // 지원 요청 → 폼으로 이동
     const ctaButton = event.target.closest(".modal-cta:not(.modal-cta--feedback):not(.modal-cta--guide):not(.modal-cta--demo)");
     if (ctaButton && ctaButton.dataset.appName) {

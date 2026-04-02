@@ -1,0 +1,31 @@
+{
+  "id": "video-background",
+  "name": "동영상 배경 블록",
+  "appType": "single",
+  "type": "ui-embed",
+  "status": "planned",
+  "visibility": "public",
+  "accessMode": "self-serve",
+  "supportModel": "self-serve-first",
+  "guideUrl": null,
+  "demoUrl": null,
+  "summary": "페이지 배경에 자동 재생되는 동영상을 삽입하여 시각적 임팩트를 높입니다.",
+  "delivery": ["body-code"],
+  "requires": ["site-admin-access", "custom-html-access"],
+  "customerConfig": ["siteUrl", "videoUrl", "targetSection"],
+  "risks": [
+    {
+      "level": "medium",
+      "label": "mobile-performance",
+      "description": "모바일에서 동영상 배경이 성능에 영향을 줄 수 있다."
+    }
+  ],
+  "evidencePaths": [],
+  "implementationGuide": null,
+  "marketplace": {
+    "category": "addon",
+    "guidanceMode": "request-review",
+    "ctaLabel": "적용 가이드",
+    "listed": true
+  }
+}

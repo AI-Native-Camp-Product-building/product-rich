@@ -1,0 +1,31 @@
+{
+  "id": "slide-animation",
+  "name": "슬라이드 애니메이션 블록",
+  "appType": "single",
+  "type": "ui-embed",
+  "status": "planned",
+  "visibility": "public",
+  "accessMode": "self-serve",
+  "supportModel": "self-serve-first",
+  "guideUrl": null,
+  "demoUrl": null,
+  "summary": "라이브클래스 메인 페이지에 슬라이드 형태의 애니메이션 블록을 추가합니다.",
+  "delivery": ["body-code"],
+  "requires": ["site-admin-access", "custom-html-access"],
+  "customerConfig": ["siteUrl", "slideImages", "slideInterval"],
+  "risks": [
+    {
+      "level": "medium",
+      "label": "responsive-maintenance",
+      "description": "반응형과 레이아웃 유지보수를 직접 해야 한다."
+    }
+  ],
+  "evidencePaths": [],
+  "implementationGuide": null,
+  "marketplace": {
+    "category": "addon",
+    "guidanceMode": "request-review",
+    "ctaLabel": "적용 가이드",
+    "listed": true
+  }
+}

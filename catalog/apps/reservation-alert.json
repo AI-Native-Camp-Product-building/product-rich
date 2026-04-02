@@ -1,6 +1,7 @@
 {
   "id": "reservation-alert",
   "name": "강의 예약 알림",
+  "appType": "single",
   "type": "ui-embed",
   "status": "active",
   "visibility": "public",
@@ -44,7 +45,7 @@
   ],
   "implementationGuide": "implementation/guide.md",
   "marketplace": {
-    "category": "marketing",
+    "category": "addon",
     "guidanceMode": "request-review",
     "ctaLabel": "적용 가이드",
     "listed": true

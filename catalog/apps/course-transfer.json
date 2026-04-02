@@ -1,6 +1,7 @@
 {
   "id": "course-transfer",
   "name": "수강 이전",
+  "appType": "single",
   "type": "ops-automation",
   "status": "active",
   "visibility": "private",
@@ -46,7 +47,7 @@
   ],
   "implementationGuide": "implementation/guide.md",
   "marketplace": {
-    "category": "migration",
+    "category": "automation",
     "guidanceMode": "managed-service",
     "ctaLabel": "상담 요청",
     "listed": true

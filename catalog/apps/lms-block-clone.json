@@ -1,6 +1,7 @@
 {
   "id": "lms-block-clone",
   "name": "LMS 블록 클론",
+  "appType": "single",
   "type": "hosted-page",
   "status": "verified",
   "visibility": "public",
@@ -42,7 +43,7 @@
   "evidencePaths": [],
   "implementationGuide": "implementation/",
   "marketplace": {
-    "category": "design",
+    "category": "addon",
     "guidanceMode": "request-review",
     "ctaLabel": "적용 가이드",
     "listed": true

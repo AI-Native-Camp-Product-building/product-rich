@@ -1,0 +1,31 @@
+{
+  "id": "video-player",
+  "name": "동영상 재생 블록",
+  "appType": "single",
+  "type": "ui-embed",
+  "status": "planned",
+  "visibility": "public",
+  "accessMode": "self-serve",
+  "supportModel": "self-serve-first",
+  "guideUrl": null,
+  "demoUrl": null,
+  "summary": "페이지 내에 YouTube나 외부 동영상을 재생할 수 있는 블록을 추가합니다.",
+  "delivery": ["body-code"],
+  "requires": ["site-admin-access", "custom-html-access"],
+  "customerConfig": ["siteUrl", "videoUrl", "targetSection"],
+  "risks": [
+    {
+      "level": "low",
+      "label": "iframe-block",
+      "description": "일부 동영상 소스가 iframe 삽입을 차단할 수 있다."
+    }
+  ],
+  "evidencePaths": [],
+  "implementationGuide": null,
+  "marketplace": {
+    "category": "addon",
+    "guidanceMode": "request-review",
+    "ctaLabel": "적용 가이드",
+    "listed": true
+  }
+}
