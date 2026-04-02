@@ -138,7 +138,7 @@ function renderSingleModal(app) {
 
   const guideSection = app.guideUrl
     ? `<a class="modal-cta modal-cta--guide" href="${escapeHtml(app.guideUrl)}" target="_blank">적용 가이드 보기 &rarr;</a>`
-    : `<div class="modal-notice">적용 가이드를 준비 중입니다. 지원 요청을 남겨주시면 직접 안내해드립니다.</div>`;
+    : `<a class="modal-cta modal-cta--guide" href="./guide/how-to-apply.html" target="_blank">적용 방법 알아보기 &rarr;</a>`;
 
   return `
     <div class="modal-top-badges">
@@ -214,6 +214,7 @@ function renderBundleModal(app) {
     </div>
     <h2>${escapeHtml(app.name)}</h2>
     <p class="modal-summary">${escapeHtml(app.summary)}</p>
+    <a class="modal-cta modal-cta--guide" href="./guide/how-to-apply.html" target="_blank">적용 방법 알아보기 &rarr;</a>
     <div class="detail-section">
       <h4>세부 기능</h4>
       <div class="accordion-group">
